@@ -10,13 +10,11 @@ const messages = new Schema({
     },
     conversationId: {
         type: Number,
-        required: true,
-        unique: true
+        required: true
     },
     senderId: {
         type: Number,
-        required: true,
-        unique: true
+        required: true
     },
     messageType: Array,
     message: {
