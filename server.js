@@ -1,13 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const http = require('http');
+const app = express();
+const http = require('http').Server(app);
+const socket = require('socket.io')(http);
+
 
 const bodyParser = require('body-parser');
 const config = require('./config/config');
 const routes = require('./src/routes/routes');
 mongoose.Promise = global.Promise;
 
-const app = express();
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*')
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE')
@@ -34,9 +36,14 @@ mongoose.connect(config.MONGO_URI, {
 });
 
 //Port to access the api
-http.createServer(app).listen(config.PORT, function () {
+socket.on('connection', () => {
+    console.log('Client Connected!');
+});
+
+http.listen(config.PORT, function () {
     console.clear();
     console.log('Application listing on port', config.PORT);
 });
+
 
 module.exports = app;
